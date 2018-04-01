@@ -7,6 +7,7 @@ from scipy.optimize import curve_fit
 import numpy as np
 import inspect
 import warnings
+from scipy.integrate import simps
 
 
 class FitLSQ(object):
@@ -103,4 +104,5 @@ class FitLSQ(object):
         bounds = self.Bounds or (-np.inf, np.inf)
         self.Parameters, self.Covariances =\
             curve_fit(self.Function, x, y, p0=p0, bounds=bounds, **kwargs)
+        self.NormalFactor = simps(self.Function(x, *self.Parameters), x)
         return self
