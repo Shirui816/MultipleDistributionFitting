@@ -20,8 +20,8 @@ def n_func(n, known=[]):
     def _wrapper(func):
         signature_ = inspect.getfullargspec(func).args
         # For scipy fitting
-        assert signature_[
-            0] == 'x', "The function must has `x' for its 1st value!"
+        assert signature_[0] == 'x',\
+            "The function must has `x' for its 1st value!"
         # make sure that functions like f(x) appear...
         # what would you want to fit?
         assert len(signature_) > 1, "........Seriously?"
