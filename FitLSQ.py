@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: shirui <shirui816@gmail.com>
+
+
 from scipy.optimize import curve_fit
 import numpy as np
 import inspect
