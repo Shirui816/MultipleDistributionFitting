@@ -24,7 +24,7 @@ class FitLSQ(object):
         self.Bounds = None
         self.Function = func
         self.NormalFactor = 1
-        self.N_, self._P = self.__get_paramter()
+        self.N_, self.P_ = self.__get_paramter()
 
     def __get_paramter(self):
         r"""Get number of parameters.
@@ -33,7 +33,7 @@ class FitLSQ(object):
         """
         args = inspect.getfullargspec(self.Function).args
         # -1 for 'x' is always the 1st value.
-        return len(args) - 1, args
+        return len(args) - 1, args[1:]
 
     def set_bounds(self, bounds, known=[]):
         r"""Set bounds for target function.
