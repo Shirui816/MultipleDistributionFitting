@@ -29,7 +29,7 @@ class Evaluation(object):
         sample
         """
         pdf /= np.sum(pdf)
-        return np.random.choice(x, size=n, p=probability)
+        return np.random.choice(x, size=n, p=pdf)
 
     # This func is already a sum of functions
     def _log_prob(self, x):
@@ -59,7 +59,7 @@ class Evaluation(object):
         Returns:
         aic: np.ndarray
         """
-        return 2 * self.model._N -\
+        return 2 * self.model.N_ -\
             2 * self.score(x) * x.shape[0]
 
     def bic(self, x):
@@ -77,7 +77,7 @@ class Evaluation(object):
         Returns:
         bic: np.ndarray
         """
-        return self.model._N * np.log(x.shape[0]) -\
+        return self.model.N_ * np.log(x.shape[0]) -\
             2 * self.score(x) * x.shape[0]
 
     def aicc(self, x):
@@ -96,10 +96,10 @@ class Evaluation(object):
         Returns:
         bic: np.ndarray
         """
-        return 2 * self.model._N * np.log(x.shape[0]) -\
+        return 2 * self.model.N_ * np.log(x.shape[0]) -\
             2 * self.score(x) * x.shape[0] +\
-            2 * (self.model._N ** 2 + self.model._N) /\
-            (x.shape[0] - self.model._N - 1)
+            2 * (self.model.N_ ** 2 + self.model.N_) /\
+            (x.shape[0] - self.model.N_ - 1)
 
     def score(self, x):
         r"""Calculate Likelyhood.

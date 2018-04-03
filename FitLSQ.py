@@ -2,12 +2,11 @@
 # -*- coding:utf-8 -*-
 # Author: shirui <shirui816@gmail.com>
 
-
-from scipy.optimize import curve_fit
-import numpy as np
 import inspect
 import warnings
+import numpy as np
 from scipy.integrate import simps
+from scipy.optimize import curve_fit
 
 
 class FitLSQ(object):
@@ -24,7 +23,8 @@ class FitLSQ(object):
         self.InitParameters = None
         self.Bounds = None
         self.Function = func
-        self._N, self._P = self.__get_paramter()
+        self.NormalFactor = 1
+        self.N_, self._P = self.__get_paramter()
 
     def __get_paramter(self):
         r"""Get number of parameters.
@@ -50,16 +50,16 @@ class FitLSQ(object):
                       UserWarning)
         lb, ub = bounds
         # number of bounds must equal to the base function n_parameters' number
-        N = self._N + len(known) - known.count(None)
-        NBases = N // len(lb)
-        Unknow = NBases - len(known) // len(lb)
+        _n = self.N_ + len(known) - known.count(None)
+        n_bases = _n // len(lb)
+        un_know = n_bases - len(known) // len(lb)
         assert isinstance(bounds, list), "Bounds must be list object."
-        assert len(ub) == len(lb) and N % len(ub) == 0,\
+        assert len(ub) == len(lb) and _n % len(ub) == 0,\
             "Number of bounds must equal to number of BASE's arguments!"
         _lb = [lb[_ % len(lb)]
-               for _ in range(len(known)) if known[_] is None] + lb * Unknow
+               for _ in range(len(known)) if known[_] is None] + lb * un_know
         _ub = [ub[_ % len(ub)]
-               for _ in range(len(known)) if known[_] is None] + ub * Unknow
+               for _ in range(len(known)) if known[_] is None] + ub * un_know
         self.Bounds = [_lb, _ub]
         return self
 
@@ -75,15 +75,15 @@ class FitLSQ(object):
         """
         warnings.warn("p0 must EXACTLY match the base function!",
                       UserWarning)
-        N = self._N + len(known) - known.count(None)
-        NBases = N // len(p0)
-        Unknow = NBases - len(known) // len(p0)
+        _n = self.N_ + len(known) - known.count(None)
+        n_bases = _n // len(p0)
+        un_know = n_bases - len(known) // len(p0)
         assert isinstance(p0, list), "p0 must be list object."
         # number of bounds must equal to the base function n_parameters' number
-        assert N % len(p0) == 0,\
+        assert _n % len(p0) == 0,\
             "Number of initials must equal to number of BASE arguments!"
         _p0 = [p0[_ % len(p0)]
-               for _ in range(len(known)) if known[_] is None] + p0 * Unknow
+               for _ in range(len(known)) if known[_] is None] + p0 * un_know
         self.InitParameters = _p0
         return self
 
