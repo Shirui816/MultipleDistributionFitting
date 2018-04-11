@@ -1,20 +1,9 @@
-.. MultipleDistributionFitting documentation master file, created by
-   sphinx-quickstart on Tue Apr  3 19:06:46 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. include:: ../README.rst
 
-Welcome to MultipleDistributionFitting's documentation!
-=======================================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 3
+    :glob:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    install.ipynb
+    theory_usage.ipynb
