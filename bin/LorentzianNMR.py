@@ -51,9 +51,17 @@ f_2 = simps(y, x)
 y /= f_2
 
 # p0 is set for the base function
-_models = [_.set_p0([1/(__ + 1), 0.002, 3.7]) for __, _ in enumerate(_models)]
+_gamma = float(input("Enter initial guess of GAMMA: "))
+_chemical_shift = float(input("Enter initial guess of DELTA: "))
+_models = [_.set_p0([1/(__ + 1), _gamma, _chemical_shift])
+           for __, _ in enumerate(_models)]
 # bounds are the lower/upper limits of each parmater of base function
-_models = [_.set_bounds([[0, 0.0001, 3.5], [1, 0.01, 4]]) for _ in _models]
+_gamma_lb = float(input("Enter lower bound of GAMMA: "))
+_gamma_hb = float(input("Enter higher bound of GAMMA: "))
+_delta_lb = float(input("Enter lower bound of DELTA: "))
+_delta_hb = float(input("Enter higher bound of DELTA: "))
+_models = [_.set_bounds([[0, _gamma_lb, _delta_lb], [1, _gamma_hb, _delta_hb]])
+           for _ in _models]
 _models = [_.fit(x, y) for _ in _models]
 
 _eva = [Evaluation(_) for _ in _models]
