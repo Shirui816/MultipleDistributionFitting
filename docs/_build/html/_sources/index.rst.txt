@@ -7,3 +7,4 @@
 
     install.ipynb
     theory_usage.ipynb
+    nmr.ipynb

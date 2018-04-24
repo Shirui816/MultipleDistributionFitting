@@ -68,8 +68,8 @@ class NMRFitting(object):
         self._datas = datas
         self._R = components_range
 
-    def set_p0_bounds(self, p0=(0.5, 0.002, 3.7),
-                      bounds=((0, 1e-4, 3.5), (1, 1e-1, 4.1))):
+    def set_p0_bounds(self, p0=[0.5, 0.002, 3.7],
+                      bounds=[[0, 1e-4, 3.5], [1, 1e-1, 4.1]]):
         r"""Set p0 and bounds, defaults are for PEG.
 
         Arguments:
@@ -87,10 +87,10 @@ class NMRFitting(object):
         self._models = [_.set_bounds(bounds) for _ in self._models]
         return self
 
-    def fitting(self):
+    def fitting(self, **kwargs):
         r"""Fitting method."""
         x, y = self._data[0], self._data[1]
-        _models = [_.fit(x, y) for _ in self._models]
+        _models = [_.fit(x, y, **kwargs) for _ in self._models]
         _eva = [Evaluation(_) for _ in _models]
         _pmfs = np.array([_.T[1] for _ in self._datas])
         _xs = np.array([_.T[0] for _ in self._datas])
