@@ -41,7 +41,7 @@ Install requirements by
 pip install -r requirements.txt
 ```
 
-### Windows executables is preparing
+### Windows executables are preparing
 
 For Unix/Linux users, you can use `python bin/LorentzianNMR.py <files>`, or
 simply `LorentzianNMR.py <files>` if `LorentzianNMR.py` is in your `PATH`.
