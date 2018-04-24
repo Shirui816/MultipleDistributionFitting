@@ -12,7 +12,7 @@ See the [document](http://multipledistributionfitting.readthedocs.io/en/latest/i
 
 ## Installation
 
-### pip is preparing currently
+### pip installation method is on the way
 
 ### Directly download
 
