@@ -5,6 +5,6 @@
     :maxdepth: 3
     :glob:
 
-    install.ipynb
-    theory_usage.ipynb
-    nmr.ipynb
+    source/install.ipynb
+    source/theory_usage.ipynb
+    source/nmr.ipynb

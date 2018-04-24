@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Theory and Usage &mdash; MultipleDistributionFitting 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lorentzian mixtures for H\(^1\)NMR" href="nmr.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MultipleDistributionFitting
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Theory and Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Theory">Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Generate-mixture-models-for-fitting">Generate mixture models for fitting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Make-a-n-fucntion-mixture-from-a-common-base">Make a n-fucntion mixture from a common base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Make-mixture-of-functions">Make mixture of functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Fitting-the-generated-models">Fitting the generated models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Evaluate-models.">Evaluate models.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nmr.html">Lorentzian mixtures for H<span class="math notranslate">\(^1\)</span>NMR</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MultipleDistributionFitting</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Theory and Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/theory_usage.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Theory-and-Usage">
+<h1>Theory and Usage<a class="headerlink" href="#Theory-and-Usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Theory">
+<h2>Theory<a class="headerlink" href="#Theory" title="Permalink to this headline">¶</a></h2>
+<p>Our goal is to find optimized number of components in a mixture model.
+Assuming that a mixture of distributions are given as:</p>
+<div class="math notranslate">
+\[f(x)=\sum_i^na_ig_i(x;\mathbf{\theta}_i)\]</div>
+<p>That each <span class="math notranslate">\(g_i(x;\mathbf{\theta}_i)\)</span> is a distribution function
+with weigth <span class="math notranslate">\(a_i\)</span>, <span class="math notranslate">\(\mathbf{\theta}_i\)</span> is the parameter
+vector. Usually, a mixture model data set can be fitted by arbitary
+number of components <span class="math notranslate">\(n\)</span>, to supress overfitting, Akaike
+information criterion (AIC), Bayesian information criterion (BIC) and a
+modified AIC (AICc) is used for small sized samples to estimate the
+model and find out the most probable number of components <span class="math notranslate">\(n\)</span>.</p>
+</div>
+<div class="section" id="Usage">
+<h2>Usage<a class="headerlink" href="#Usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Generate-mixture-models-for-fitting">
+<h3>Generate mixture models for fitting<a class="headerlink" href="#Generate-mixture-models-for-fitting" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">n_func_mix</span><span class="p">,</span> <span class="n">n_func_maker</span>
+</pre></div>
+</div>
+<div class="section" id="Make-a-n-fucntion-mixture-from-a-common-base">
+<h4>Make a n-fucntion mixture from a common base<a class="headerlink" href="#Make-a-n-fucntion-mixture-from-a-common-base" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">n_func_maker</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">known</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">callable</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Make n-function mixture from a common base.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">    func: base function, the signature must start with `x`.</span>
+<span class="sd">    n: desired number of components.</span>
+<span class="sd">    known: a list of $n\times n_{\text{func args}}$ variables.</span>
+<span class="sd">           None is for fitting variables and values for fixed variables.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    mixture: callable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>For example, suppose that a 2-component mixture is generated by the base
+fuction <code class="docutils literal notranslate"><span class="pre">f(x,</span> <span class="pre">a,</span> <span class="pre">b,</span> <span class="pre">c)</span></code> that the <code class="docutils literal notranslate"><span class="pre">a</span></code> variable of 2nd function is
+equal to 2, the
+<code class="docutils literal notranslate"><span class="pre">n_func_maker(f,</span> <span class="pre">2,</span> <span class="pre">known=[None,</span> <span class="pre">None,</span> <span class="pre">None,</span> <span class="pre">2,</span> <span class="pre">None,</span> <span class="pre">None])</span></code>
+generates a mixed function with signatures <code class="docutils literal notranslate"><span class="pre">x,</span> <span class="pre">a0,</span> <span class="pre">b0,</span> <span class="pre">c0,</span> <span class="pre">b1,</span> <span class="pre">c1</span></code>.</p>
+</div>
+<div class="section" id="Make-mixture-of-functions">
+<h4>Make mixture of functions<a class="headerlink" href="#Make-mixture-of-functions" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">n_func_mix</span><span class="p">(</span><span class="n">funcs</span><span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">callables</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">callable</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Mixer for defining functions mixed by base function.</span>
+
+<span class="sd">    For scipy.optimize.curv_fit.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">    funcs: A list of callables, and signatures of</span>
+<span class="sd">           all functions must begin with `x`.</span>
+
+<span class="sd">    Returns: Function that mixed n base functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Fitting-the-generated-models">
+<h3>Fitting the generated models<a class="headerlink" href="#Fitting-the-generated-models" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">FitLSQ</span>
+
+<span class="k">class</span> <span class="nc">FitLSQ</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="nb">callable</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">set_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">known</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">self</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Set bounds for target function.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        bounds: 2d-list for lower and upper bounds (lb, ub) for arguments</span>
+<span class="sd">                of base function. +/-np.inf for no bounds.</span>
+<span class="sd">        n: number of parameters ofl BASE functions.</span>
+<span class="sd">        known: Known parts in functions.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">set_p0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p0</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">known</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">self</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Set initial values for fitting.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        p0: tuple or list for initial parameters.</span>
+<span class="sd">        known: list for known components.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">self</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Fit the model.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        x: np.array for x</span>
+<span class="sd">        y: np.array for y</span>
+
+<span class="sd">        Keyword Arguments:</span>
+<span class="sd">        kwargs that fits scipy.optimize.curve_fit</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">model.set_p0([0.1,</span> <span class="pre">0.002,</span> <span class="pre">3.7])</span></code> and
+<code class="docutils literal notranslate"><span class="pre">model.set_bound([[0,</span> <span class="pre">-np.inf,</span> <span class="pre">1],</span> <span class="pre">[1,np.inf,</span> <span class="pre">2]])</span></code> are for a mixture
+of consists of 3-argument base functions with initial guess of (0.1,
+0.002, 3.7) for parameters and corresponding bounds are (0, 1), (-inf,
+inf) and (1, 2).</p>
+<p><strong>Warning:</strong> <code class="docutils literal notranslate"><span class="pre">set_p0</span></code> and <code class="docutils literal notranslate"><span class="pre">set_bounds</span></code> are currently supported for
+the compoents in the mixture have same base function only.</p>
+</div>
+<div class="section" id="Evaluate-models.">
+<h3>Evaluate models.<a class="headerlink" href="#Evaluate-models." title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">Evaluation</span>
+
+<span class="k">class</span> <span class="nc">Evaluation</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">FitLSQ</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Initialize with model.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        model: a fit object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">aic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate AIC.</span>
+
+<span class="sd">        Aho, K.; Derryberry, D.; Peterson, T. (2014), &quot;Model selection for</span>
+<span class="sd">        ecologists: the worldviews of AIC and BIC&quot;, Ecology, 95: 631–636,</span>
+<span class="sd">        doi:10.1890/13-1452.1.</span>
+
+<span class="sd">        AIC = 2k - 2\ln{\hat{\mathcal{L}}}, \hat{\mathcal{{L}}} is Likelihood.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        samples: samples of (n_samples, n_features)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        aic: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">bic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate BIC.</span>
+
+<span class="sd">        Schwarz, Gideon E. (1978), &quot;Estimating the dimension of a model&quot;,</span>
+<span class="sd">        Annals of Statistics, 6 (2): 461–464, doi:10.1214/aos/1176344136,</span>
+<span class="sd">        MR 0468014.</span>
+
+<span class="sd">        BIC = \ln{N}k - 2\ln{\hat{\mathcal{L}}}</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        samples: samples of (n_samples, n_features)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        bic: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+    <span class="k">def</span> <span class="nf">aicc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate AICc.</span>
+
+<span class="sd">        deLeeuw, J. (1992), &quot;Introduction to Akaike (1973) information theory</span>
+<span class="sd">        and an extension of the maximum likelihood principle&quot; (PDF),</span>
+<span class="sd">        in Kotz, S.; Johnson, N.L., Breakthroughs in Statistics I, Springer,</span>
+<span class="sd">        pp. 599–609.</span>
+
+<span class="sd">        AICc = AIC + \frac{2k^2+2k}{N-k-1}</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        samples: samples of (n_samples, n_features)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        aicc: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_sample</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">pdf</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Make random sample taken from x.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">        n: int, sample size</span>
+<span class="sd">        x: np.ndarray</span>
+<span class="sd">        pdf: np.ndarray</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        sample</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">x</span></code> is a sample data set with shape of (n_samples, n_features),
+samples can be generated by <code class="docutils literal notranslate"><span class="pre">Evaluation.make_sample</span></code> from the fitting
+data <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> if the fitting object is the pdf function.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="nmr.html" class="btn btn-neutral float-right" title="Lorentzian mixtures for H\(^1\)NMR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Shirui.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>
